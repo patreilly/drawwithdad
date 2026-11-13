@@ -1,0 +1,38 @@
+{
+  "name": "draw-with-dad",
+  "version": "0.1.0",
+  "description": "Type what you want to draw, get timed, kid-safe reference photos in seconds.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "docker compose up -d --wait dynamodb && vite",
+    "build": "tsc --noEmit && vite build && vite build -c vite.server.config.ts",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:api": "docker compose up -d --wait dynamodb && DYNAMODB_ENDPOINT=http://localhost:8000 vitest run tests/api.test.ts",
+    "typecheck": "tsc --noEmit",
+    "docker": "docker compose up --build",
+    "deploy:aws": "./scripts/deploy.sh",
+    "destroy:aws": "./scripts/destroy.sh"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.1156.0",
+    "@aws-sdk/client-sesv2": "3.1156.0",
+    "@aws-sdk/lib-dynamodb": "3.1156.0",
+    "@hono/node-server": "2.1.5",
+    "@tensorflow/tfjs": "4.22.0",
+    "buffer": "6.0.3",
+    "hono": "4.13.14",
+    "nsfwjs": "4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "4.1.12"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -3,8 +3,9 @@
 Type what you want to draw, press Enter, and you're drawing from a timed reference photo within seconds.
 
 - **Kid-safe by design.** Every image is safety-checked on your device before it's shown, and there's no way to turn that off.
-- **One family account, no tracking, no API keys.** A grown-up signs up with email and password, and everything is saved on the server, so it follows you to any device. Images come from openly licensed libraries (Wikimedia Commons, Openverse, NASA) with credit shown for each one.
+- **No sign-up needed, no tracking, no API keys.** Just start drawing. A free family account is optional: it keeps your settings, saved pictures and history on the server, so they follow you to any device. Images come from openly licensed libraries (Wikimedia Commons, Openverse, NASA) with credit shown for each one.
 - **Built for practice.** Gesture timers, progressive "class" sessions, breaks, memory drawing, mirror, grayscale, value studies and a grid.
+- **👍 Thumbs-ups.** Signed-in families can thumbs-up a good reference. Everyone sees the count, and liked pictures come up sooner for the next person who searches that subject.
 - **Profiles for the whole family.** Everyone gets their own settings, presets, saved pictures and history, with an emoji, a color and an optional profile password. Kids never need an email address.
 - **Smart search (optional).** A local [Ollama](https://ollama.com) turns "dragon" into "bat wing", "lizard scales", "crocodile head"…
 
@@ -27,7 +28,7 @@ git clone <this repo> draw-with-dad && cd draw-with-dad
 docker compose up --build        # or: npm install && npm run dev
 ```
 
-Open the URL, create a family account, and start drawing. Add `?draw=horses` to go straight to drawing after sign-in.
+Open the URL and start drawing. Add `?draw=horses` to go straight to drawing.
 
 **Password-reset emails:** locally there's no email server, so reset links are printed to the log. With `npm run dev` they appear in the terminal; with Docker, run `docker compose logs api`. On AWS they're sent with Amazon SES (see below).
 
@@ -114,6 +115,8 @@ Pick a preset or open **Customize…**:
 
 ## Accounts and profiles
 
+Accounts are **optional**. Without one you draw as a guest: everything works except saving pictures and giving thumbs-ups, and nothing is kept after you close the tab. **Sign in** at the top right when you want to keep things. Signing up keeps what you did as a guest (settings, presets, history, hidden pictures).
+
 A grown-up creates one **family account** (email and password). Everyone draws under their own **profile** inside it. Kids never need an email address. You stay signed in for 30 days per device, and the last profile used opens automatically unless it has a password.
 
 Click the avatar at the top right to switch, add or edit profiles, sign out or delete the account. Each profile keeps:
@@ -132,6 +135,8 @@ Click the avatar at the top right to switch, add or edit profiles, sign out or d
 
 Hiding an image (X) hides it for everyone in the family. Each profile can un-hide only what it hid.
 
+**Thumbs-ups (👍 or L).** Tells other families a picture is a good one to draw. Each family counts once, counts are public (just a number, never who), and a liked picture jumps ahead of the ones not shown yet when someone else searches. Deleting the account takes its thumbs-ups back.
+
 ### How sign-in is secured
 
 - **Password storage:** account and profile passwords are hashed on the server with scrypt (N=2¹⁷, r=8, p=1, OWASP's recommended settings), each with a random salt. Passwords are never stored or logged.
@@ -140,7 +145,7 @@ Hiding an image (X) hides it for everyone in the family. Each profile can un-hid
 - **Guessing:** sign-in, profile unlock and password reset are rate-limited, and failed sign-ins take the same time whether or not the email exists.
 - **Password reset:** reset links work once and expire after 60 minutes. Using one signs out every other device.
 - **Deleting the account** removes every profile, saved picture and history entry.
-- **Browser storage:** nothing is stored in the browser except the login cookie. Searches are cached in memory only for the open tab.
+- **Browser storage:** nothing is stored in the browser except the login cookie, not even for guests (their work lives in the open tab's memory). Searches are cached in memory only for the open tab.
 
 ## How it works
 

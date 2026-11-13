@@ -1,0 +1,49 @@
+# Everything, locally:   docker compose up --build   → http://localhost:8080
+# (PORT=3000 docker compose up --build to change the port.)
+#
+# `npm run dev` uses only the dynamodb service from this file.
+services:
+  web:
+    build: { context: ., target: web }
+    image: draw-with-dad-web
+    ports: ["${PORT:-8080}:8080"]
+    depends_on:
+      api: { condition: service_healthy }
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+
+  api:
+    build: { context: ., target: api }
+    image: draw-with-dad-api
+    environment:
+      DYNAMODB_ENDPOINT: http://dynamodb:8000
+      TABLE_NAME: draw-with-dad
+      # Used for links in password-reset emails. Locally, those emails are printed to this container's log:
+      #   docker compose logs api
+      APP_URL: http://localhost:${PORT:-8080}
+    depends_on:
+      dynamodb: { condition: service_healthy }
+    restart: unless-stopped
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+
+  # The official local version of DynamoDB, so the same code runs here and on AWS.
+  dynamodb:
+    image: amazon/dynamodb-local:2.6.1
+    # Root only so it can write to the named volume; it's not exposed beyond this machine.
+    user: root
+    working_dir: /home/dynamodblocal
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "./data"]
+    ports: ["127.0.0.1:8000:8000"]
+    volumes: [dynamodb-data:/home/dynamodblocal/data]
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8000'"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+    restart: unless-stopped
+
+volumes:
+  dynamodb-data:

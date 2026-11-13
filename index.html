@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Type what you want to draw and get timed, kid-safe reference photos in seconds." />
+    <meta name="color-scheme" content="light dark" />
+    <title>Draw with Dad</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✏️</text></svg>" />
+  </head>
+  <body>
+    <div id="app"><p class="booting">Loading…</p></div>
+    <!-- Value-study filters: grayscale, then quantize to N tones. -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <filter id="posterize-2" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0" />
+        <feComponentTransfer>
+          <feFuncR type="discrete" tableValues="0 1" />
+          <feFuncG type="discrete" tableValues="0 1" />
+          <feFuncB type="discrete" tableValues="0 1" />
+        </feComponentTransfer>
+      </filter>
+      <filter id="posterize-3" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0" />
+        <feComponentTransfer>
+          <feFuncR type="discrete" tableValues="0 0.5 1" />
+          <feFuncG type="discrete" tableValues="0 0.5 1" />
+          <feFuncB type="discrete" tableValues="0 0.5 1" />
+        </feComponentTransfer>
+      </filter>
+      <filter id="posterize-4" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0" />
+        <feComponentTransfer>
+          <feFuncR type="discrete" tableValues="0 0.333 0.667 1" />
+          <feFuncG type="discrete" tableValues="0 0.333 0.667 1" />
+          <feFuncB type="discrete" tableValues="0 0.333 0.667 1" />
+        </feComponentTransfer>
+      </filter>
+      <filter id="posterize-5" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 1 0" />
+        <feComponentTransfer>
+          <feFuncR type="discrete" tableValues="0 0.25 0.5 0.75 1" />
+          <feFuncG type="discrete" tableValues="0 0.25 0.5 0.75 1" />
+          <feFuncB type="discrete" tableValues="0 0.25 0.5 0.75 1" />
+        </feComponentTransfer>
+      </filter>
+    </svg>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
